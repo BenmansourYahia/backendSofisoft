@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.org/dtd/hibernate-reverse-engineering-3.0.dtd" >
+<!-- 
+<hibernate-reverse-engineering>
+  <table-filter match-catalog="Alpha55" match-schema="dbo" match-name="DSP_MAGASIN"/>
+  <table-filter match-catalog="Alpha55" match-schema="dbo" match-name="STK_VENTE_DIRECTE"/>
+  <table-filter match-catalog="Alpha55" match-schema="dbo" match-name="LINE_VENTE_DIRECT"/>
+  <table-filter match-catalog="Alpha55" match-schema="dbo" match-name="STK_PRODUITS_GENERIQUE"/>
+  <table-filter match-catalog="Alpha55" match-schema="dbo" match-name="STK_PRD_DIM"/>
+  <table-filter match-catalog="Alpha55" match-schema="dbo" match-name="VENDEUR_MAG"/>
+  <table-filter match-catalog="Alpha55" match-schema="dbo" match-name="CFG_UTILISATEUR"/>
+</hibernate-reverse-engineering>
+ -->
