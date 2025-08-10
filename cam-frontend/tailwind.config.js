@@ -30,7 +30,8 @@ export default {
           700: '#374151',
           800: '#1f2937',
           900: '#111827',
-        }
+        },
+        border: 'hsl(var(--border))' // Added border color
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -38,7 +39,10 @@ export default {
       boxShadow: {
         'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
         'medium': '0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-      }
+      },
+      borderColor: ({ theme }) => ({
+        DEFAULT: theme('colors.gray.200', 'currentColor'),
+      }),
     },
   },
   plugins: [],
