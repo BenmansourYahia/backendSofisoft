@@ -113,4 +113,21 @@ public interface VueCaMagJourObjDAO extends JpaRepository<VueCaMagJourObj, Strin
 			+ "group by vue.jourVente "
 			+ "order by vue.jourVente")
 	List<VueCaMagJourObj> getInfosByDateGroupedByVenteDayAndMagasin(Date debut, Date fin, String codeMagasin);
+
+
+	@Query("select new ma.sofisoft.cam2020ws.model.DashboardModel(" +
+			"vue.codeMagasin, " +
+			"vue.nomMagasin, " +
+			"SUM(vue.montantTTC), " +
+			"SUM(vue.quantite), " +
+			"SUM(vue.nombreTickets), " +
+			"SUM(vue.montantTTC)/NULLIF(SUM(vue.quantite),0), " +
+			"SUM(vue.montantTTC)*100 / NULLIF(sum(vue.montantTTC),0), " +
+			"SUM(vue.quantite)/NULLIF(SUM(vue.nombreTickets),0), " +
+			"SUM(vue.montantTTC)/NULLIF(SUM(vue.nombreTickets),0)) " +
+			"from VueCaMagJourObj vue " +
+			"where vue.codeMagasin in :codesMagasins " +
+			"group by vue.codeMagasin, vue.nomMagasin")
+	List<DashboardModel> getStatsParMagasins2(@Param("codesMagasins") List<String> codesMagasins);
+
 }

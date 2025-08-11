@@ -3,8 +3,8 @@ package ma.sofisoft.cam2020ws.model;
 import java.util.Date;
 
 public class EvolutionCAModel {
-    private Date jourVente;
-    private double montantTTC;
+     Date jourVente;
+   double montantTTC;
 
     public EvolutionCAModel(Date jourVente, double montantTTC) {
         this.jourVente = jourVente;

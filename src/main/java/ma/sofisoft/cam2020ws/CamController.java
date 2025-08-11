@@ -884,6 +884,36 @@ public class CamController {
 		}
 		return evolution;
 	}
+	@PostMapping("/compareMagasins")
+	public CompareResponse compareMagasins(@RequestBody List<String> codesMagasins) {
+		List<DashboardModel> stats = vueCaMagJourObjDAO.getStatsParMagasins2(codesMagasins);
+
+		// Classement par CA décroissant
+		stats.sort((a, b) -> Double.compare(b.getMontantTTC(), a.getMontantTTC()));
+
+		// Calcul des écarts
+		double maxCA = stats.stream().mapToDouble(DashboardModel::getMontantTTC).max().orElse(0);
+		double minCA = stats.stream().mapToDouble(DashboardModel::getMontantTTC).min().orElse(0);
+		double ecartCA = maxCA - minCA;
+
+		double maxTickets = stats.stream().mapToDouble(DashboardModel::getNombreTickets).max().orElse(0);
+		double minTickets = stats.stream().mapToDouble(DashboardModel::getNombreTickets).min().orElse(0);
+		double ecartTickets = maxTickets - minTickets;
+
+		double maxQuantite = stats.stream().mapToDouble(DashboardModel::getQuantite).max().orElse(0);
+		double minQuantite = stats.stream().mapToDouble(DashboardModel::getQuantite).min().orElse(0);
+		double ecartQuantite = maxQuantite - minQuantite;
+
+		CompareResponse response = new CompareResponse();
+		response.setMagasins(stats);
+		response.setClassement(stats); // déjà trié
+		response.setEcartCA(ecartCA);
+		response.setEcartTickets(ecartTickets);
+		response.setEcartQuantite(ecartQuantite);
+
+		return response;
+	}
+
 
 	@RequestMapping(value = "/Login", method = RequestMethod.POST)
 	public MyResponse Login(@RequestBody HashMap map) {

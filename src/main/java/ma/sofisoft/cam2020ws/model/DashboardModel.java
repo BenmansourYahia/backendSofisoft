@@ -1,16 +1,16 @@
 package ma.sofisoft.cam2020ws.model;
 
 public class DashboardModel {
-    private String codeMagasin;
-    private String nomMagasin;
-    private double montantTTC;
-    private double quantite;
-    private double nombreTickets;
-    private double prixMoyen;
-    private double tauxObjectif;
-    private double debitMoyen;
-    private double panierMoyen;
-    private double objectif;
+     String codeMagasin;
+     String nomMagasin;
+    double montantTTC;
+     double quantite;
+     double nombreTickets;
+     double prixMoyen;
+   double tauxObjectif;
+    double debitMoyen;
+    double panierMoyen;
+    double objectif;
 
     public DashboardModel(
             String codeMagasin,
