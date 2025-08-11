@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import ma.sofisoft.cam2020ws.model.*;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -57,13 +54,6 @@ import ma.sofisoft.cam2020ws.entity.VueCaMagJourObj;
 import ma.sofisoft.cam2020ws.entity.VuePrdsVendusParDate;
 import ma.sofisoft.cam2020ws.entity.VueStockProduits;
 import ma.sofisoft.cam2020ws.helper.LineVenteAdapter;
-import ma.sofisoft.cam2020ws.model.BestSalePrdModel;
-import ma.sofisoft.cam2020ws.model.MagasinModel;
-import ma.sofisoft.cam2020ws.model.MyResponse;
-import ma.sofisoft.cam2020ws.model.ProduitModel;
-import ma.sofisoft.cam2020ws.model.StockModel;
-import ma.sofisoft.cam2020ws.model.UserModel;
-import ma.sofisoft.cam2020ws.model.VenteModel;
 
 @RestController
 @RequestMapping(value = "/*")
@@ -110,6 +100,8 @@ public class CamController {
 	
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	@Autowired
+	private VueCaMagJourObjDAO vueCaMagJourObjDAO;
 	
 	SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
@@ -848,8 +840,51 @@ public class CamController {
 		response.setSuccess(true);
 		return response;
 	}
-	
-	
+	@GetMapping("/dashboardMagasins")
+	public List<DashboardModel> getDashboardMagasins(@RequestParam(required = false) String codeMagasin) {
+		List<DashboardModel> stats;
+		if (codeMagasin != null && !codeMagasin.isEmpty()) {
+			stats = vueCaMagJourObjDAO.getStatsParMagasinAndCode(codeMagasin);
+		} else {
+			stats = vueCaMagJourObjDAO.getStatsParMagasin();
+		}
+
+		// Calcul de la moyenne du CA (montant_ttc)
+		double sommeCA = stats.stream().mapToDouble(DashboardModel::getMontantTTC).sum();
+		double moyenneCA = stats.isEmpty() ? 0 : sommeCA / stats.size();
+
+		// Affecte la moyenne comme objectif et calcule le taux d'atteinte pour chaque magasin
+		for (DashboardModel d : stats) {
+			d.setObjectif(moyenneCA);
+			d.setTauxObjectif(moyenneCA > 0 ? d.getMontantTTC() / moyenneCA * 100 : 0);
+		}
+		return stats;
+	}
+
+
+	@GetMapping("/evolutionCA")
+	public List<EvolutionCAModel> getEvolutionCA(
+			@RequestParam String dateDebut,
+			@RequestParam String dateFin,
+			@RequestParam(required = false) String codeMagasin) throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date debut = sdf.parse(dateDebut);
+		Date fin = sdf.parse(dateFin);
+
+		List<VueCaMagJourObj> ventes;
+		if (codeMagasin != null && !codeMagasin.isEmpty()) {
+			ventes = vueCaMagJourObjDAO.getInfosByDateGroupedByVenteDayAndMagasin(debut, fin, codeMagasin);
+		} else {
+			ventes = vueCaMagJourObjDAO.getInfosByDateGroupedByVenteDay(debut, fin);
+		}
+
+		List<EvolutionCAModel> evolution = new ArrayList<>();
+		for (VueCaMagJourObj v : ventes) {
+			evolution.add(new EvolutionCAModel(v.getJourVente(), v.getMontantTTC()));
+		}
+		return evolution;
+	}
+
 	@RequestMapping(value = "/Login", method = RequestMethod.POST)
 	public MyResponse Login(@RequestBody HashMap map) {
 		MyResponse response = new MyResponse();
@@ -942,4 +977,5 @@ public class CamController {
 		logger.info("checkServer "+ number*2);
 		return number*2;
 	}
+
 }
