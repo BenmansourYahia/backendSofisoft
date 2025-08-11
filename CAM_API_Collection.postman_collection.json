@@ -1,0 +1,168 @@
+{
+  "info": {
+    "name": "CAM API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Root",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/",
+        "description": "Vérifie que l'API est accessible"
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:8080/Login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"nom\": \"votre_utilisateur\",\n    \"motPasse\": \"votre_mot_de_passe\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "Authentification utilisateur. Retourne l'utilisateur, la liste des magasins et les paramètres de l'application."
+      }
+    },
+    {
+      "name": "Best Sales Products",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:8080/bestSalesPrds",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"numMagasin\": 1,\n    \"debut\": \"01-01-2023 00:00:00\",\n    \"fin\": \"31-12-2023 23:59:59\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "Récupère les meilleures ventes par magasin sur une période"
+      }
+    },
+    {
+      "name": "Get Line Ventes",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:8080/getLineVentes",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"numMvt\": 1,\n    \"numMagasin\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "Récupère les lignes de vente pour un mouvement spécifique"
+      }
+    },
+    {
+      "name": "Get Produits Vendus",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:8080/getPrdsVendus",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"numMagasin\": 1,\n    \"debut\": \"01-01-2023 00:00:00\",\n    \"fin\": \"31-12-2023 23:59:59\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "Récupère les produits vendus par magasin sur une période"
+      }
+    },
+    {
+      "name": "Get Dimensions Produits Vendus",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:8080/getDimsPrdVendus",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"numMagasin\": 1,\n    \"numProduit\": 123,\n    \"debut\": \"01-01-2023 00:00:00\",\n    \"fin\": \"31-12-2023 23:59:59\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "Récupère les dimensions des produits vendus"
+      }
+    },
+    {
+      "name": "Get Paramètres",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:8080/getParam",
+        "description": "Récupère les paramètres de l'application"
+      }
+    },
+    {
+      "name": "Get Magasins",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:8080/getMagasins",
+        "description": "Récupère la liste des magasins"
+      }
+    },
+    {
+      "name": "Get Infos Magasins par Date",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:8080/getMagasinsInfoByDate",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"withDate\": true,\n    \"debut\": \"01-01-2023 00:00:00\",\n    \"fin\": \"31-12-2023 23:59:59\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "Récupère les informations des magasins sur une période"
+      }
+    },
+    {
+      "name": "Comparer Périodes",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:8080/getComparePeriode",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"dateDebut_1\": \"01-01-2023 00:00:00\",\n    \"dateFin_1\": \"31-03-2023 23:59:59\",\n    \"dateDebut_2\": \"01-04-2023 00:00:00\",\n    \"dateFin_2\": \"30-06-2023 23:59:59\",\n    \"codeMagasin\": \"MAG001\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "Compare les performances entre deux périodes pour un magasin"
+      }
+    },
+    {
+      "name": "Get Infos par Date",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:8080/getInfosByDate",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"debut\": \"01-01-2023 00:00:00\",\n    \"fin\": \"31-12-2023 23:59:59\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "Récupère les informations générales sur une période"
+      }
+    }
+  ]
+}
