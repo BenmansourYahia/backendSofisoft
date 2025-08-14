@@ -1,0 +1,71 @@
+# ProjetStageCAM – API Backend Documentation
+
+## Présentation
+
+Ce projet est une API Spring Boot pour la gestion et l’analyse des ventes, stocks et performances de magasins.  
+Elle expose de nombreux endpoints pour :  
+- Le dashboard multi-magasins  
+- La comparaison de magasins  
+- L’évolution du chiffre d’affaires  
+- Les ventes détaillées  
+- Le stock  
+- L’authentification et la gestion des utilisateurs
+
+---
+
+## Endpoints principaux
+
+| Endpoint                                 | Méthode | Description                                                                                       |
+|-------------------------------------------|---------|---------------------------------------------------------------------------------------------------|
+| `/`                                      | GET     | Message de bienvenue                                                                              |
+| `/bestSalesPrds`                         | POST    | Liste des meilleurs produits vendus sur une période et un magasin                                 |
+| `/getLineVentes`                         | POST    | Lignes de vente pour un mouvement et un magasin                                                   |
+| `/getPrdsVendus`                         | POST    | Produits vendus sur une période et un magasin                                                     |
+| `/getDimsPrdVendus`                      | POST    | Dimensions d’un produit vendu sur une période et un magasin                                       |
+| `/getParam`                              | POST    | Paramètres de l’application (module ANDROID_UPDATE_APP)                                           |
+| `/getMagasins`                           | POST    | Liste des magasins                                                                                |
+| `/getMagasinsInfoByDate`                 | POST    | Infos magasins (CA, tickets, etc.) sur une période ou globalement                                 |
+| `/getMagasinsInfos`                      | POST    | Infos magasins sur une période (liste d’objets)                                                   |
+| `/getComparePeriode`                     | POST    | Compare deux périodes pour un magasin donné (CA, tickets, etc.)                                   |
+| `/getInfosByDate`                        | POST    | Ventes par jour sur une période, plus comparaison avec la même période N-1                        |
+| `/getInfosDay`                           | POST    | Ventes par heure sur une journée, plus comparaison avec la même journée N-1                       |
+| `/getDims`                               | POST    | Dimensions d’un produit à partir du code-barres                                                   |
+| `/StockByProduct`                        | POST    | Stock d’un produit (par code produit ou code-barres), avec ou sans dimensions                     |
+| `/GlobalStock`                           | POST    | Stock global de tous les produits, avec différents filtres (stock = 0, >0, <0, etc.)              |
+| `/dashboardMagasins`                     | GET     | KPIs (CA, tickets, quantités, etc.) pour tous les magasins ou un magasin précis                   |
+| `/evolutionCA`                           | GET     | Évolution du CA par jour sur une période, pour un magasin ou tous les magasins                    |
+| `/compareMagasins`                       | POST    | Compare plusieurs magasins : KPIs, écarts, classement, etc.                                       |
+| `/Login`                                 | POST    | Authentifie un utilisateur et retourne ses infos, magasins associés et paramètres                 |
+
+---
+
+## Modèles de données principaux
+
+- **DashboardModel** : KPIs d’un magasin (CA, tickets, quantités, prix moyen, panier moyen, etc.)
+- **CompareResponse** : Résultat de la comparaison multi-magasins (liste, écarts, classement)
+- **EvolutionCAModel** : Évolution du CA (date, montant)
+- **MyResponse** : Structure de réponse générique (succès, data, message, exception…)
+
+---
+
+## Interfaces DAO principales
+
+- **VueCaMagJourObjDAO** :  
+  Accès aux données agrégées par magasin/jour, méthodes pour stats, évolution, comparaison, etc.
+- **StkVenteDirectDAO, LineVenteDirectDAO** :  
+  Accès aux ventes et lignes de vente.
+- **ParametresDAO, DspMagasinDAO, etc.** :  
+  Accès aux paramètres, magasins, utilisateurs.
+
+---
+
+## Fonctionnalités principales
+
+- **Dashboard** : Vue globale des performances magasins (CA, tickets, quantités, etc.)
+- **Comparaison** : Comparaison multi-magasins avec écarts et classement
+- **Évolution** : Graphique d’évolution du CA par jour
+- **Ventes** : Détail des ventes, best-sellers, lignes de vente
+- **Stock** : Consultation du stock global ou par produit
+- **Authentification** : Login utilisateur, récupération des droits et paramètres
+
+---
