@@ -567,43 +567,54 @@ public class CamController {
 		}
 		return response;
 	}
-	
-	public MyResponse getProductStockForGen(String codeProduit,String designation) {
+	public MyResponse getProductStockForGen(String codeProduit, String designation) {
 		MyResponse response = new MyResponse();
-		
+
 		RowMapper<StockModel> ParametreRowMapper = new RowMapper<StockModel>() {
 			@Override
 			public StockModel mapRow(ResultSet resultSet, int arg1) throws SQLException {
 				StockModel obj = new StockModel();
-				
 				obj.setQuantite(resultSet.getInt("quantite"));
 				obj.setMagasin(resultSet.getString("designation"));
 				obj.setDesignation(resultSet.getString("nomProduit"));
 				return obj;
 			}
 		};
-		String query = "select depot.designation," + 
-				"isnull(PRD_DIM_DEPOT.QUANTITE,0) as quantite, " + 
-				"stk_produits_generique.designation nomProduit "+
-				"from   depot, " + 
-				"PRD_DIM_DEPOT," + 
-				"stk_prd_dim," + 
-				"stk_produits_generique " + 
-				"where depot.CODE_DEPOT = PRD_DIM_DEPOT.CODE_DEPOT and " + 
-				"stk_produits_generique.num_produit = stk_prd_dim.num_produit and " + 
-				"stk_prd_dim.num_dims = prd_dim_depot.num_dims and " + 
-				"(STK_PRD_DIM.code_produit = ? or stk_produits_generique.designation = ?)";
-		logger.info("query : "+query);
-		
-		List<StockModel> stockModel = jdbcTemplate.query(query, new Object[] { codeProduit,codeProduit }, ParametreRowMapper);
+
+		String query;
+		Object[] params;
+
+		// If both codeProduit and designation are null, return all products (no filter)
+		if (codeProduit == null && designation == null) {
+			query = "select depot.designation," +
+					"isnull(PRD_DIM_DEPOT.QUANTITE,0) as quantite, " +
+					"stk_produits_generique.designation nomProduit " +
+					"from depot, PRD_DIM_DEPOT, stk_prd_dim, stk_produits_generique " +
+					"where depot.CODE_DEPOT = PRD_DIM_DEPOT.CODE_DEPOT and " +
+					"stk_produits_generique.num_produit = stk_prd_dim.num_produit and " +
+					"stk_prd_dim.num_dims = prd_dim_depot.num_dims";
+			params = new Object[] {};
+		} else {
+			query = "select depot.designation," +
+					"isnull(PRD_DIM_DEPOT.QUANTITE,0) as quantite, " +
+					"stk_produits_generique.designation nomProduit " +
+					"from depot, PRD_DIM_DEPOT, stk_prd_dim, stk_produits_generique " +
+					"where depot.CODE_DEPOT = PRD_DIM_DEPOT.CODE_DEPOT and " +
+					"stk_produits_generique.num_produit = stk_prd_dim.num_produit and " +
+					"stk_prd_dim.num_dims = prd_dim_depot.num_dims and " +
+					"(STK_PRD_DIM.code_produit = ? or stk_produits_generique.designation = ?)";
+			params = new Object[] { codeProduit, codeProduit };
+		}
+
+		List<StockModel> stockModel = jdbcTemplate.query(query, params, ParametreRowMapper);
 		Type typeOf = new TypeToken<List<StockModel>>() {}.getType();
-		String data = getGson().toJson(stockModel,typeOf);
+		String data = getGson().toJson(stockModel, typeOf);
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("data", data);
 		map.put("isHadDims", false);
 		map.put("designation", designation);
 		typeOf = new TypeToken<HashMap<String, Object>>() {}.getType();
-		response.setData(getGson().toJson(map,typeOf));
+		response.setData(getGson().toJson(map, typeOf));
 		response.setSuccess(true);
 		return response;
 	}

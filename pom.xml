@@ -76,7 +76,11 @@
 			<version>0.0.20131108.vaadin1</version>
 			<scope>compile</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr4-runtime</artifactId>
+			<version>4.9.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>
